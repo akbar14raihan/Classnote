@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Beranda{% endblock %}
+{% block content %}
+<section class="stats">
+  <div class="stat"><span>{{ stats.notes }}</span>Catatan</div>
+  <div class="stat"><span>{{ stats.courses }}</span>Mata kuliah</div>
+  <div class="stat"><span>{{ stats.pinned }}</span>Disematkan</div>
+</section>
+
+<form class="filters" method="get" action="{{ url_for('index') }}">
+  <input type="search" name="q" value="{{ q }}" placeholder="Cari judul atau isi catatan...">
+  <select name="course">
+    <option value="">Semua mata kuliah</option>
+    {% for c in courses %}
+      <option value="{{ c.id }}" {{ 'selected' if course_id == c.id }}>{{ c.name }}</option>
+    {% endfor %}
+  </select>
+  <select name="category">
+    <option value="">Semua kategori</option>
+    {% for cat in categories %}
+      <option value="{{ cat }}" {{ 'selected' if category == cat }}>{{ cat }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn" type="submit">Filter</button>
+  {% if q or course_id or category %}
+    <a class="btn ghost" href="{{ url_for('index') }}">Reset</a>
+  {% endif %}
+</form>
+
+{% if notes %}
+  <section class="grid">
+    {% for n in notes %}
+      <article class="card note">
+        <div class="meta">
+          <span class="badge {{ n.category|lower }}">{{ n.category }}</span>
+          <span class="course">{{ n.course_name }}</span>
+          {% if n.pinned %}<span class="pin">&#128204;</span>{% endif %}
+        </div>
+        <h3><a href="{{ url_for('note_detail', note_id=n.id) }}">{{ n.title }}</a></h3>
+        <p>{{ n.content[:140] }}{% if n.content|length > 140 %}...{% endif %}</p>
+        <div class="date">{{ n.created_at.strftime('%d %b %Y, %H:%M') }}</div>
+      </article>
+    {% endfor %}
+  </section>
+{% else %}
+  <div class="card empty">
+    Belum ada catatan{% if q or course_id or category %} yang cocok dengan filter{% endif %}.
+    <a href="{{ url_for('note_new') }}">Buat catatan pertama</a>.
+  </div>
+{% endif %}
+{% endblock %}

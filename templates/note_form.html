@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Ubah' if note else 'Catatan Baru' }}{% endblock %}
+{% block content %}
+<h1>{{ 'Ubah Catatan' if note else 'Catatan Baru' }}</h1>
+<form class="card form" method="post">
+  <label for="course_id">Mata kuliah</label>
+  <select id="course_id" name="course_id" required>
+    {% for c in courses %}
+      <option value="{{ c.id }}" {{ 'selected' if note and note.course_id == c.id }}>{{ c.name }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="title">Judul</label>
+  <input id="title" name="title" maxlength="150" required value="{{ note.title if note else '' }}" placeholder="Contoh: Ringkasan pertemuan 5">
+
+  <label for="category">Kategori</label>
+  <select id="category" name="category">
+    {% for cat in categories %}
+      <option value="{{ cat }}" {{ 'selected' if note and note.category == cat }}>{{ cat }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="content">Isi catatan</label>
+  <textarea id="content" name="content" rows="10" required placeholder="Tulis catatanmu di sini...">{{ note.content if note else '' }}</textarea>
+
+  <label class="check"><input type="checkbox" name="pinned" {{ 'checked' if note and note.pinned }}> Sematkan di atas</label>
+
+  <div class="actions">
+    <button class="btn" type="submit">Simpan</button>
+    <a class="btn ghost" href="{{ url_for('note_detail', note_id=note.id) if note else url_for('index') }}">Batal</a>
+  </div>
+</form>
+{% endblock %}

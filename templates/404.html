@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Tidak ditemukan{% endblock %}
+{% block content %}
+<div class="card empty">
+  <h1>404</h1>
+  Halaman atau catatan yang kamu cari tidak ditemukan.
+  <p><a class="btn" href="{{ url_for('index') }}">Kembali ke beranda</a></p>
+</div>
+{% endblock %}

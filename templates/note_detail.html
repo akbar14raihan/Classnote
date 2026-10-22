@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ note.title }}{% endblock %}
+{% block content %}
+<article class="card detail">
+  <div class="meta">
+    <span class="badge {{ note.category|lower }}">{{ note.category }}</span>
+    <span class="course">{{ note.course_name }}</span>
+    {% if note.pinned %}<span class="pin">&#128204; Disematkan</span>{% endif %}
+  </div>
+  <h1>{{ note.title }}</h1>
+  <div class="date">
+    Dibuat {{ note.created_at.strftime('%d %b %Y, %H:%M') }}
+    {% if note.updated_at != note.created_at %}&middot; diubah {{ note.updated_at.strftime('%d %b %Y, %H:%M') }}{% endif %}
+  </div>
+  <div class="content">{{ note.content }}</div>
+
+  <div class="actions">
+    <a class="btn" href="{{ url_for('note_edit', note_id=note.id) }}">Ubah</a>
+    <form method="post" action="{{ url_for('note_pin', note_id=note.id) }}">
+      <button class="btn ghost" type="submit">{{ 'Lepas sematan' if note.pinned else 'Sematkan' }}</button>
+    </form>
+    <form method="post" action="{{ url_for('note_delete', note_id=note.id) }}" onsubmit="return confirm('Hapus catatan ini?');">
+      <button class="btn danger" type="submit">Hapus</button>
+    </form>
+    <a class="btn ghost" href="{{ url_for('index') }}">Kembali</a>
+  </div>
+</article>
+{% endblock %}

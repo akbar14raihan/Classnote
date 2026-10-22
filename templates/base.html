@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Catatan Kuliah{% endblock %} - Catatan Kuliah</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="top">
+    <div class="container bar">
+      <a class="brand" href="{{ url_for('index') }}">&#128218; Catatan Kuliah</a>
+      <nav>
+        <a href="{{ url_for('index') }}">Catatan</a>
+        <a href="{{ url_for('courses_page') }}">Mata Kuliah</a>
+        <a class="btn small" href="{{ url_for('note_new') }}">+ Catatan Baru</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="container foot">
+    M Akbar Raihan (102062430017) &middot; Komputasi Awan &middot;
+    Flask + PostgreSQL berjalan di Docker pada Azure VM
+  </footer>
+</body>
+</html>

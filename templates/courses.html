@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Mata Kuliah{% endblock %}
+{% block content %}
+<h1>Mata Kuliah</h1>
+
+<form class="card form inline" method="post">
+  <div>
+    <label for="name">Nama mata kuliah</label>
+    <input id="name" name="name" maxlength="100" required placeholder="Contoh: Basis Data">
+  </div>
+  <div>
+    <label for="lecturer">Dosen (opsional)</label>
+    <input id="lecturer" name="lecturer" maxlength="100" placeholder="Nama dosen">
+  </div>
+  <button class="btn" type="submit">Tambah</button>
+</form>
+
+{% if courses %}
+  <div class="card">
+    <table>
+      <thead><tr><th>Mata kuliah</th><th>Dosen</th><th>Catatan</th><th></th></tr></thead>
+      <tbody>
+      {% for c in courses %}
+        <tr>
+          <td><a href="{{ url_for('index', course=c.id) }}">{{ c.name }}</a></td>
+          <td>{{ c.lecturer or '-' }}</td>
+          <td>{{ c.total }}</td>
+          <td class="right">
+            <form method="post" action="{{ url_for('course_delete', course_id=c.id) }}" onsubmit="return confirm('Hapus mata kuliah ini beserta seluruh catatannya?');">
+              <button class="btn danger small" type="submit">Hapus</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="card empty">Belum ada mata kuliah.</div>
+{% endif %}
+{% endblock %}
