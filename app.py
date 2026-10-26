@@ -18,9 +18,12 @@ def get_conn():
         try:
             return psycopg2.connect(
                 host=os.getenv("DB_HOST", "db"),
+                port=os.getenv("DB_PORT", "5432"),
                 dbname=os.getenv("DB_NAME", "appdb"),
                 user=os.getenv("DB_USER", "appuser"),
                 password=os.getenv("DB_PASS", "apppass"),
+                # Azure Database for PostgreSQL mewajibkan SSL: isi DB_SSLMODE=require
+                sslmode=os.getenv("DB_SSLMODE", "prefer"),
             )
         except psycopg2.OperationalError:
             time.sleep(2)
